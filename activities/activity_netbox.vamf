@@ -1,0 +1,7 @@
+{
+   "name":"NetBox",
+   "shortDescription": "Link to NetBox.",
+   "icon":"/activity_netbox.png",
+   "descriptionMarkdown":"activity_netbox.md",
+   "topology" : []
+}

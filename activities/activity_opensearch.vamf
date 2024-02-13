@@ -1,0 +1,7 @@
+{
+   "name":"OpenSearch",
+   "shortDescription": "Link to OpenSearch.",
+   "icon":"/activity_opensearch.svg",
+   "descriptionMarkdown":"activity_opensearch.md",
+   "topology" : []
+}

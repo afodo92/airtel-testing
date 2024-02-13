@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Airtel Automation Report - {{test_cycle}}.{{build}}</title>
+      	<style>
+			h1 {
+				 display: flex;
+				 justify-content: center;
+				 align-items: center;
+				 height: 100px;
+				 color:white;
+				 background-color: #36486b;
+				 font-family: "Raleway", sans-serif
+				 }
+			p {
+				 color:#3e4444;
+				 border-color: #36486b;
+				 margin: 2%;
+				 font-family: "Raleway", sans-serif;
+				 font-size:20px;
+			}
+			#results {
+				 font-family: "Raleway", sans-serif;
+				 border-collapse: collapse;
+				 width: 96%;
+				 margin-left: 2%
+			}
+			#results td, #results th {
+				 border: 1px solid #ddd;
+				 padding: 8px;
+			}
+			#results tr{background-color: #f2f2f2;}
+			#results tr:hover {background-color: #ddd;}
+			#results th {
+				 padding-top: 12px;
+				 padding-bottom: 12px;
+				 text-align: left;
+				 background-color: #618685;
+				 color: white;
+			}
+			#executed {
+				 font-family: "Raleway", sans-serif;
+				 border-collapse: collapse;
+				 margin-left: 2%;
+				 background-color: #f2f2f2;
+			}
+			#executed td {
+				 border: 1px solid #ddd;
+				 padding: 8px;
+			}
+			#executed td:first-child {
+				color: white;
+			}
+      	</style>
+	</head>
+
+	<body>
+		<h1>AIRTEL AUTOMATION REPORT - {{test_cycle}}.{{build}}</h1>
+
+		<p style="float:left">Test Cycle Name<br><br>
+			Execution Date<br>
+        	Execution Build<br>
+        	Execution Results Location<br>
+        	Execution Pass Percentage<br>
+		</p>
+		<p><br>: {{test_cycle}}<br><br>
+			: {{time_date}}<br>
+        	: {{build}}<br>
+        	: <a href="{{runlist_link}}">RunList_Link</a><br>
+        	: {{(100*pass_fail_summary['pass']/(pass_fail_summary['total'] - pass_fail_summary['not_run'])) | round(2)}}%<br>
+		</p>
+
+		<br>
+		<table id = "executed">
+			<colgroup>
+			<col span="1" style="background-color:#618685"/>
+			</colgroup>
+			<tr>
+				<td>Number of Testcases</td>
+				<td style="text-align:center">{{pass_fail_summary['total']}}</td>
+			</tr>
+			<tr>
+				<td>Passed Executions</td>
+				<td style="background-color: #1B5E20;color:white; text-align:center">{{pass_fail_summary['pass']}}</td>
+			</tr>
+			<tr>
+				<td>Failed Executions</td>
+				<td style="background-color: #C62828;color:white; text-align:center">{{pass_fail_summary['fail']}}</td>
+			</tr>
+			<tr>
+				<td>Indeterminate</td>
+				<td style="background-color: #F9A825; text-align:center">{{pass_fail_summary['indeterminate']}}</td>
+			</tr>
+			<tr>
+				<td>Skipped Executions</td>
+				<td style="background-color: #F9A825; text-align:center">{{pass_fail_summary['not_run']}}</td>
+			</tr>
+			<tr>
+				<td>Execution Pass Percentage</td>
+				<td style="text-align:center">{{(100*pass_fail_summary['pass']/(pass_fail_summary['total'] - pass_fail_summary['not_run'])) | round(2)}}%</td>
+			</tr>
+		</table>
+
+		<br><br>
+
+		<table id = "results">
+			<tr>
+				<th style="width:5%">Test Key</th>
+				<th style="width:30%">Automation Run Name</th>
+				<th style="width:5%">Automation Run Result</th>
+				<th style="width:5%">Automation Run Execution Link</th>
+				<th style="width:45%">Automation Run Failure Reason</th>
+			</tr>
+
+			{% for test_key in results_data%}
+				<tr>
+					<td style="width:5%">{{test_key}}</td>
+					<td style="width:30%">{{results_data[test_key]["test_name"]}}</td>
+					<td style="width:5%">{{results_data[test_key]["result"]}}</td>
+					<td style="width:5%"><a href="{{results_data[test_key]['execution_link']}}">RunDetails_Link</a></td>
+					<td style="width:45%">{{results_data[test_key]["failure_reason"]}}</td>
+				</tr>
+			{% endfor %}
+		</table>
+
+		<br><br>
+
+		<h2></h2>
+		<p style="float:left">Skipped executions: {{not_run_list}}<br><br>
+		</p>
+	</body>
+</html>

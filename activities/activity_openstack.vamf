@@ -1,0 +1,7 @@
+{
+   "name":"OpenStack",
+   "shortDescription": "Link to OpenStack.",
+   "icon":"/activity_openstack.jpg",
+   "descriptionMarkdown":"activity_openstack.md",
+   "topology" : []
+}
