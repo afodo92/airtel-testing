@@ -22,8 +22,7 @@ Velocity = {
 
 Jira = {
     "host": "jira.spirenteng.com",
-    "service_name_velo": "Vantage"
-    # Vantage (VWX)
+    "service_name_velo": "Service_Jira"
 }
 
 Netbox = {

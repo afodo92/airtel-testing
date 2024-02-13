@@ -442,16 +442,15 @@ def main():
     # else:
     #     test_keys = {"ok": runlist_name, "test_cycle_id": None, "test_keys_list": None}
 
-'''
-Hardcoded stuff
-'''
-test_keys = {"ok": runlist_name, "test_cycle_id": None, "test_keys_list": ["airtel_pass","airtel_fail","airtel_pass","airtel_fail"]}
-# Case 2: runlist_name = "New_Runlist"
-topology_id = "77b5d525-f9ce-4c70-81de-8141200ed5f0"
-
-'''
-Hardcoded stuff END
-'''
+    '''
+    Hardcoded stuff
+    '''
+    test_keys = {"ok": runlist_name, "test_cycle_id": None, "test_keys_list": ["airtel_pass","airtel_fail","airtel_pass","airtel_fail"]}
+    # Case 2: runlist_name = "New_Runlist"
+    topology_id = "77b5d525-f9ce-4c70-81de-8141200ed5f0"
+    '''
+    Hardcoded stuff END
+    '''
     if test_keys["ok"]:
         deploy_runlist_response = deploy_runlist_execution(cycle_id=test_keys["test_cycle_id"],
                                                            keys_list=test_keys["test_keys_list"],
