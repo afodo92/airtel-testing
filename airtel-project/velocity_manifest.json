@@ -80,6 +80,64 @@
 			]
 		},
 		{
+			"fileNameMatch": ".*run_phase_1_runlist_creation\\.py",
+			"hidden": false,
+			"requirements": [
+				{
+					"name": "os.type",
+					"value": "linux"
+				}
+			],
+			"commandSequence": [
+				"%file% --jira_project_key %param_jira_project_key% --jira_project_release_name %param_jira_project_release_name% --zephyr_test_cycle_name %param_zephyr_test_cycle_name% --story_key_for_comment %param_story_key_for_comment% --zephyr_build %param_zephyr_build% --runlist_name %param_runlist_name% --topology_name %param_topology_name%"
+			],
+			"testCaseName": "Integration Zephyr Jira",
+			"description": "Script used to deploy runlist executions based on existing runlists or given Zephyr cycle names.",
+			"parameters": [
+				{
+					"name": "jira_project_key",
+					"type": "TEXT",
+					"description": "Main Jira project key.",
+					"value": "VELO"
+				},
+				{
+					"name": "jira_project_release_name",
+					"value": "unscheduled",
+					"type": "TEXT",
+					"description": "Jira project release name."
+				},
+				{
+					"name": "zephyr_test_cycle_name",
+					"type": "TEXT",
+					"value": "auto_cycle_3",
+					"description": "Name of the Zephyr test cycle used in the execution in case not runlist name is provided."
+				},
+				{
+					"name": "story_key_for_comment",
+					"type": "TEXT",
+					"description": "Story in which the results of the execution will be posted.",
+					"value": "VELO-1"
+				},
+				{
+					"name": "zephyr_build",
+					"type": "TEXT",
+					"value": "a.2"
+				},
+				{
+					"name": "runlist_name",
+					"type": "TEXT",
+					"value": "N/A",
+					"description": "Name of the runlist which will be executed in case no Zephyr test cycle name is provided. Set as 'N/A to ignore this argument.'"
+				},
+				{
+					"name": "topology_name",
+					"type": "TEXT",
+					"value": "N/A",
+					"description": "Name of the topology. Set as 'N/A' if no topology will be used."
+				}
+			]
+		},
+		{
 			"fileNameMatch": ".*send_reservation_email\\.py",
 			"requirements": [
 				{
