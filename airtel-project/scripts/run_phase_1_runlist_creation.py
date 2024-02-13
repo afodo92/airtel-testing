@@ -14,7 +14,8 @@ import sys
 import time
 from datetime import datetime
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../../..'))
+# sys.path.append(os.path.join(os.path.dirname(__file__), '../../../..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 import helpers.Logger as Local_logger
 import libs.libs_velocity.Velocity as Velocity
 from parameters.global_parameters import Reporting as REPORTINGPARAMS
