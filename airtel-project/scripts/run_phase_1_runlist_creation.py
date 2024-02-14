@@ -201,6 +201,10 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
     automation_results_data = {}
     testcases_list = []
 
+    '''
+    HARDCODED stuff
+    '''
+    zephyr_cycle_id = 123
     # TODO - Identify full path for MONITOR script using Filter and velocity_session.get_automation_assets(filters ={"tags": ["MONITOR"]})
     # save full path for monitor script in a variable named monitor_test_path
 
