@@ -318,8 +318,8 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
                                                                    detail_level="ALL_ISSUES_ALL_STEPS",
                                                                    terminate_on_item_fail=False,
                                                                    execution_name=execution_name,
-                                                                   topology_id=topology_id,
-                                                                   zephyr_cycle_id=zephyr_cycle_id)
+                                                                   topology_id=topology_id)
+                                                                   # zephyr_cycle_id=zephyr_cycle_id)
 
     if runlist_execution_id:
         log_worker.info(f"Runlist execution ID is: {runlist_execution_id}")
