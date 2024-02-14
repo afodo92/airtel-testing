@@ -206,7 +206,9 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
     tag = "airtel_monitor"
     filter_set = {"tags": [tag]}
     automation_assets = velocity_session.get_automation_assets(filters=filter_set)
+    print(automation_assets)
     if len(automation_assets["content"]) != 0:
+        print('MONITOR WAS FOUND')
         monitor_test_path = automation_assets["content"][0]["fullPath"]
     # TODO - Identify full path for HTML GENERATOR script using Filter and velocity_session.get_automation_assets(filters ={"tags": ["REPORTER"]})
     # save full path for monitor script in a variable named html_test_path
@@ -214,6 +216,7 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
     filter_set = {"tags": [tag]}
     automation_assets = velocity_session.get_automation_assets(filters=filter_set)
     if len(automation_assets["content"]) != 0:
+        print('REPORTER WAS FOUND')
         reporter_test_path = automation_assets["content"][0]["fullPath"]
 
     if runlist_name == "N/A":
