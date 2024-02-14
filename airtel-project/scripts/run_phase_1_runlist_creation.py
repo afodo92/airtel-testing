@@ -450,6 +450,7 @@ def main():
     # Case 2: runlist_name = "New_Runlist"
     topology_id = "77b5d525-f9ce-4c70-81de-8141200ed5f0"
     jira_session = "N/A"
+    zephyr_session = "N/A"
     '''
     Hardcoded stuff END
     '''
