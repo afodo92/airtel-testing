@@ -203,9 +203,18 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
 
     # TODO - Identify full path for MONITOR script using Filter and velocity_session.get_automation_assets(filters ={"tags": ["MONITOR"]})
     # save full path for monitor script in a variable named monitor_test_path
-
+    tag = "airtel_monitor"
+    filter_set = {"tags": [tag]}
+    automation_assets = velocity_session.get_automation_assets(filters=filter_set)
+    if len(automation_assets["content"]) != 0:
+        monitor_test_path = automation_assets["content"][0]["fullPath"]
     # TODO - Identify full path for HTML GENERATOR script using Filter and velocity_session.get_automation_assets(filters ={"tags": ["REPORTER"]})
     # save full path for monitor script in a variable named html_test_path
+    tag = "airtel_reporter"
+    filter_set = {"tags": [tag]}
+    automation_assets = velocity_session.get_automation_assets(filters=filter_set)
+    if len(automation_assets["content"]) != 0:
+        reporter_test_path = automation_assets["content"][0]["fullPath"]
 
     if runlist_name == "N/A":
 
@@ -226,7 +235,7 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
                 log_worker.info(f"Testcase {automation_assets['content'][0]['name']} was found for tag: {tag}")
                 testcases_list.append(automation_assets["content"][0]["fullPath"])
                 # TODO - Append monitor previous result script
-                # testcases_list.append(monitor_test_path)
+                testcases_list.append(monitor_test_path)
             else:
                 log_worker.warning(f"No testcases were found for tag: {tag}")
                 to_exclude.append(tag)
@@ -264,7 +273,7 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
                 automation_results_data[tag]["test_name"] = automation_asset_info["content"][0]["name"]
                 testcases_list.append(full_path)
                 # TODO - Append monitor previous result script
-                # testcases_list.append(monitor_test_path)
+                testcases_list.append(monitor_test_path)
                 log_worker.debug(f"Current list of testcases: {testcases_list}")
                 keys_list.append(tag)
                 log_worker.debug(f"Current list of keys: {keys_list}")
@@ -274,7 +283,7 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
                                  f"{automation_asset_info}")
 
     # TODO - Append html reporter script
-    # testcases_list.append(html_test_path)
+    testcases_list.append(reporter_test_path)
 
     # '''Preparing the Zephyr Cycle - identifying or creating a new one'''
     # '''Get Jira Project ID and Version - needed for Zephyr actions '''
