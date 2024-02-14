@@ -449,6 +449,7 @@ def main():
     test_keys = {"ok": runlist_name, "test_cycle_id": None, "test_keys_list": ["airtel_pass","airtel_fail","airtel_pass","airtel_fail"]}
     # Case 2: runlist_name = "New_Runlist"
     topology_id = "77b5d525-f9ce-4c70-81de-8141200ed5f0"
+    jira_session = "N/A"
     '''
     Hardcoded stuff END
     '''
