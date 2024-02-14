@@ -21,7 +21,7 @@ import libs.libs_velocity.Velocity as Velocity
 from parameters.global_parameters import Reporting as REPORTINGPARAMS
 from parameters.global_parameters import Jira as JIRAPARAMS
 from parameters.global_parameters import Velocity as VELOCITYPARAMS
-from libs.libs_jira.JiraCore import JiraCore
+# from libs.libs_jira.JiraCore import JiraCore
 from libs.libs_zephyr.ZephyrCore import ZephyrCore
 
 log_worker = Local_logger.create_logger(__name__, REPORTINGPARAMS["log_level_default"],
