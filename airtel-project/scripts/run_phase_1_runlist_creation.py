@@ -201,10 +201,6 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
     automation_results_data = {}
     testcases_list = []
 
-    '''
-    HARDCODED stuff
-    '''
-    zephyr_cycle_id = 123
     # TODO - Identify full path for MONITOR script using Filter and velocity_session.get_automation_assets(filters ={"tags": ["MONITOR"]})
     # save full path for monitor script in a variable named monitor_test_path
 
@@ -312,6 +308,11 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
 
     '''Post runlist execution'''
     log_worker.info(f"Creating runlist execution using testcase list: {testcases_list}")
+
+    '''
+    HARDCODED stuff
+    '''
+    zephyr_cycle_id = "123"
 
     runlist_execution_id = velocity_session.post_runlist_execution(testcase_paths=testcases_list,
                                                                    detail_level="ALL_ISSUES_ALL_STEPS",
@@ -450,7 +451,7 @@ def main():
     '''
     Hardcoded stuff
     '''
-    test_keys = {"ok": runlist_name, "test_cycle_id": None, "test_keys_list": ["airtel_pass","airtel_fail","airtel_pass","airtel_fail"]}
+    test_keys = {"ok": runlist_name, "test_cycle_id": "Test_Cycle_Id", "test_keys_list": ["airtel_pass","airtel_fail","airtel_pass","airtel_fail"]}
     # Case 2: runlist_name = "New_Runlist"
     topology_id = "77b5d525-f9ce-4c70-81de-8141200ed5f0"
     jira_session = "N/A"
