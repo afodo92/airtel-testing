@@ -197,7 +197,7 @@ def __zephyr_create_cycle(session: ZephyrCore, project_id, project_version, cycl
 
 def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_version_name, jira_project_key,
                              zephyr_test_cycle_name, zephyr_build, velocity_session, topology_id, jira_session,
-                             zephyr_session):
+                             zephyr_session, runlist_parameters=None):
     automation_results_data = {}
     testcases_list = []
 
@@ -206,9 +206,7 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
     tag = "airtel_monitor"
     filter_set = {"tags": [tag]}
     automation_assets = velocity_session.get_automation_assets(filters=filter_set)
-    print(automation_assets)
     if len(automation_assets["content"]) != 0:
-        print('MONITOR WAS FOUND')
         monitor_test_path = automation_assets["content"][0]["fullPath"]
     # TODO - Identify full path for HTML GENERATOR script using Filter and velocity_session.get_automation_assets(filters ={"tags": ["REPORTER"]})
     # save full path for monitor script in a variable named html_test_path
@@ -216,7 +214,6 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
     filter_set = {"tags": [tag]}
     automation_assets = velocity_session.get_automation_assets(filters=filter_set)
     if len(automation_assets["content"]) != 0:
-        print('REPORTER WAS FOUND')
         reporter_test_path = automation_assets["content"][0]["fullPath"]
 
     if runlist_name == "N/A":
@@ -226,7 +223,6 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
         to_exclude = []
         execution_name = cycle_id
         for tag in keys_list:
-
             filter_set = {"tags": [tag]}
             automation_assets = velocity_session.get_automation_assets(filters=filter_set)
             if len(automation_assets["content"]) != 0:
@@ -330,8 +326,8 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
                                                                    detail_level="ALL_ISSUES_ALL_STEPS",
                                                                    terminate_on_item_fail=False,
                                                                    execution_name=execution_name,
-                                                                   topology_id=topology_id)
-                                                                   # zephyr_cycle_id=zephyr_cycle_id)
+                                                                   topology_id=topology_id,
+                                                                   runlist_parameters=runlist_parameters)
 
     if runlist_execution_id:
         log_worker.info(f"Runlist execution ID is: {runlist_execution_id}")
@@ -468,6 +464,16 @@ def main():
     topology_id = "77b5d525-f9ce-4c70-81de-8141200ed5f0"
     jira_session = "N/A"
     zephyr_session = "N/A"
+    runlist_parameters = [
+        {"name": "jira_project_key", "type": "TEXT", "value": jira_project_key},
+        {"name": "jira_project_release_name", "type": "TEXT", "value": jira_project_release_name},
+        {"name": "zephyr_test_cycle_name", "type": "TEXT", "value": zephyr_test_cycle_name},
+        {"name": "story_key_for_comment", "type": "TEXT", "value": story_key_for_comment},
+        {"name": "zephyr_build", "type": "TEXT", "value": zephyr_build},
+        {"name": "runlist_name", "type": "TEXT", "value": runlist_name},
+        {"name": "topology_name", "type": "TEXT", "value": topology_name}
+    ]
+    runlist_parameters.append({"name": "zephyr_test_cycle_id", "type": "TEXT", "value": test_keys["test_cycle_id"]})
     '''
     Hardcoded stuff END
     '''
@@ -482,7 +488,8 @@ def main():
                                                            velocity_session=velocity_session,
                                                            topology_id=topology_id,
                                                            jira_session=jira_session,
-                                                           zephyr_session=zephyr_session)
+                                                           zephyr_session=zephyr_session,
+                                                           runlist_parameters=runlist_parameters)
         if not deploy_runlist_response["ok"]:
             log_worker.error(f"Runlist could not be started. Exiting execution.")
             log_worker.error(f"Finished: FAILED")

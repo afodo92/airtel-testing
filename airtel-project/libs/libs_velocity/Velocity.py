@@ -646,7 +646,7 @@ class API:
 
         return paths
 
-    def post_runlist_execution(self, testcase_paths, detail_level, terminate_on_item_fail, execution_name, topology_id):
+    def post_runlist_execution(self, testcase_paths, detail_level, terminate_on_item_fail, execution_name, topology_id, runlist_parameters):
         """
         Method used to start a runlist execution in Velocity
         :param testcase_paths: list of testcase paths for each of the testcases included in the runlist
@@ -654,6 +654,7 @@ class API:
         :param terminate_on_item_fail: set to True to stop the runlist immediately when at least one execution fails
         :param execution_name: name of the runlist execution
         :param topology_id: ID of the topology used throughout the runlist execution
+        :param runlist_parameters: List containing the following fields for each parameter
         :return: ID of the runlist execution
         """
         this_method_name = sys._getframe().f_code.co_name
@@ -673,6 +674,10 @@ class API:
 
         for path in testcase_paths:
             post_body["main"]["items"].append({"path": path})
+
+        if runlist_parameters:
+            for parameter in runlist_parameters:
+                post_body["general"]["parameters"].append(parameter)
 
         log_worker.debug(
             f"{self.this_class_name} - {this_method_name} - Starting runlist execution sing the following JSON body: {post_body}")
