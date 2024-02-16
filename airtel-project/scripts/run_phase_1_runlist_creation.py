@@ -312,7 +312,9 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
     # Try to get the Test Cycle name from a request on the first reportId (as the first reportId is the one creating the Test Cycle)
     # Nx how many arguments we want to add to the runlist (one of them will be Test Cycle ID)
     # runlist["general"]["parameters"].append({'description': '', 'masked': False, 'name': 'zephyr_cycle_id', 'type': 'TEXT','value': '1231321'})
+    runlist_parameters.append({"name": "zephyr_test_cycle_id", "type": "TEXT", "value": zephyr_cycle_id})
     # TODO - Add all parameters from the initial script to the newly created runlist
+    # Done in main function. Variable runlist_parameters
 
     '''Post runlist execution'''
     log_worker.info(f"Creating runlist execution using testcase list: {testcases_list}")
@@ -473,7 +475,6 @@ def main():
         {"name": "runlist_name", "type": "TEXT", "value": runlist_name},
         {"name": "topology_name", "type": "TEXT", "value": topology_name}
     ]
-    runlist_parameters.append({"name": "zephyr_test_cycle_id", "type": "TEXT", "value": test_keys["test_cycle_id"]})
     '''
     Hardcoded stuff END
     '''
