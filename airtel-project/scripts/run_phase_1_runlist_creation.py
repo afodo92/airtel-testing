@@ -307,6 +307,10 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
     # if zephyr_cycle_id == 0:
     #     log_worker.error(f"Failed to identify ID for Test Cycle {zephyr_test_cycle_name}")
     #     return {"ok": False}
+    '''
+    HARDCODED
+    '''
+    zephyr_cycle_id = "123"
 
     # TODO - Add runlist argument with Test Cycle ID, so that it can be picked up by the Monitor script later on.
     # Try to get the Test Cycle name from a request on the first reportId (as the first reportId is the one creating the Test Cycle)
@@ -322,7 +326,6 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
     '''
     HARDCODED stuff
     '''
-    zephyr_cycle_id = "123"
 
     runlist_execution_id = velocity_session.post_runlist_execution(testcase_paths=testcases_list,
                                                                    detail_level="ALL_ISSUES_ALL_STEPS",
