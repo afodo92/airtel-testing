@@ -665,7 +665,7 @@ class API:
         log_worker.debug(
             f"{self.this_class_name} - {this_method_name} - Creating runlist execution named {execution_name}.")
 
-        post_body = {"general": {"detailLevel": detail_level}, "main": {"items": [], "terminateOnItemFail": "false"}}
+        post_body = {"general": {"detailLevel": detail_level, "parameters": []}, "main": {"items": [], "terminateOnItemFail": "false"}}
         if topology_id:
             post_body["general"]["topologyId"] = topology_id
 
