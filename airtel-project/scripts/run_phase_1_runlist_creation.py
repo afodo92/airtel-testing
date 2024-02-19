@@ -270,12 +270,15 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
                 tag = automation_asset_info["content"][0]["tags"][0]
                 automation_results_data[tag] = {}
                 automation_results_data[tag]["test_name"] = automation_asset_info["content"][0]["name"]
-                testcases_list.append(full_path)
-                # TODO - Append monitor previous result script
-                testcases_list.append(monitor_test_path)
-                log_worker.debug(f"Current list of testcases: {testcases_list}")
-                keys_list.append(tag)
-                log_worker.debug(f"Current list of keys: {keys_list}")
+                if tag not in ["airtel_monitor", "airtel_reporter"]:
+                    testcases_list.append(full_path)
+                    # TODO - Append monitor previous result script
+                    testcases_list.append(monitor_test_path)
+                    log_worker.debug(f"Current list of testcases: {testcases_list}")
+                    keys_list.append(tag)
+                    log_worker.debug(f"Current list of keys: {keys_list}")
+                else:
+                    log_worker.debug(f"Skipping automation asset with tag: {tag}")
 
             else:
                 log_worker.error(f"No testcases were found while using filter: {filter_set}. Request response: "
