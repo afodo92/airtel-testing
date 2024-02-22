@@ -589,8 +589,10 @@ class API:
         this_method_name = sys._getframe().f_code.co_name
 
         log_worker.debug(f"{self.this_class_name} - {this_method_name} - Getting list of automation assets.")
-        url = self.base_url_ito + f"repository/v2/testcases?limit=200&filter=driver::false&" \
-                                  f"filter=includeInListingQuickCalls::false"
+        # TODO: Decide which approach to use
+        # url = self.base_url_ito + f"repository/v2/testcases?limit=200&filter=driver::false&" \
+        #                           f"filter=includeInListingQuickCalls::false"
+        url = self.base_url_ito + f"repository/v2/resources?limit=200&filter=driver::false&"
         if filters:
             url = f"{url}&"
             for flt in filters.keys():
