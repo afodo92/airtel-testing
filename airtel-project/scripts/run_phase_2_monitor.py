@@ -120,7 +120,7 @@ def main():
 
     # TODO: Identify the previously executed script
 
-    runlist_summary = get_runlist_execution(runlist_guid)[0]["executions"]
+    runlist_summary = velocity_session.get_runlist_execution(runlist_guid)[0]["executions"]
     test_case_summary = [i for i in runlist_summary if i["runlistItemId"] == str(monitor_runlist_item_number - 1)]
     test_case_report_id = test_case_summary[0]["executionId"]
     test_case_result = test_case_summary[0]["result"]
