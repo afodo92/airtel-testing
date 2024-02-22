@@ -3,7 +3,8 @@ import os
 import sys
 import time
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../../..'))
+# sys.path.append(os.path.join(os.path.dirname(__file__), '../../../..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 import helpers.Logger as Local_logger
 import libs.libs_velocity.Velocity as Velocity
 from parameters.global_parameters import Reporting as REPORTINGPARAMS
@@ -13,7 +14,7 @@ from parameters.global_parameters import Velocity as VELOCITYPARAMS
 
 from datetime import datetime
 from libs.libs_html_reporting.HTMLReportCore import HTMLGenerator
-from libs.libs_jira.JiraCore import JiraCore
+# from libs.libs_jira.JiraCore import JiraCore
 from libs.libs_zephyr.ZephyrCore import ZephyrCore
 
 log_worker = Local_logger.create_logger(__name__, REPORTINGPARAMS["log_level_default"],
