@@ -138,6 +138,25 @@
 			]
 		},
 		{
+			"fileNameMatch": ".*run_phase_2_monitor\\.py",
+			"tags": [
+				"airtel_monitor"
+			],
+			"hidden": false,
+			"requirements": [
+				{
+					"name": "os.type",
+					"value": "linux"
+				}
+			],
+			"commandSequence": [
+				"%file% --jira_project_key %param_jira_project_key% --jira_project_release_name %param_jira_project_release_name% --zephyr_test_cycle_name %param_zephyr_test_cycle_name% --story_key_for_comment %param_story_key_for_comment% --zephyr_build %param_zephyr_build% --runlist_name %param_runlist_name% --topology_name %param_topology_name%"
+			],
+			"testCaseName": "Integration Zephyr Jira",
+			"description": "Script used to deploy runlist executions based on existing runlists or given Zephyr cycle names.",
+			"parameters": []
+		},
+		{
 			"fileNameMatch": ".*send_reservation_email\\.py",
 			"requirements": [
 				{
