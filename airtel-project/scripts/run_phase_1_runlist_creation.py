@@ -203,15 +203,15 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
 
     # TODO - Identify full path for MONITOR script using Filter and velocity_session.get_automation_assets(filters ={"tags": ["MONITOR"]})
     # save full path for monitor script in a variable named monitor_test_path
-    tag = "airtel_monitor"
-    filter_set = {"tags": [tag]}
+    tag_monitor_script = "airtel_monitor"
+    filter_set = {"tags": [tag_monitor_script]}
     automation_assets = velocity_session.get_automation_assets(filters=filter_set)
     if len(automation_assets["content"]) != 0:
         monitor_test_path = automation_assets["content"][0]["fullPath"]
     # TODO - Identify full path for HTML GENERATOR script using Filter and velocity_session.get_automation_assets(filters ={"tags": ["REPORTER"]})
     # save full path for monitor script in a variable named html_test_path
-    tag = "airtel_reporter"
-    filter_set = {"tags": [tag]}
+    tag_reporter_script = "airtel_reporter"
+    filter_set = {"tags": [tag_reporter_script]}
     automation_assets = velocity_session.get_automation_assets(filters=filter_set)
     if len(automation_assets["content"]) != 0:
         reporter_test_path = automation_assets["content"][0]["fullPath"]
@@ -270,7 +270,8 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
                 tag = automation_asset_info["content"][0]["tags"][0]
                 automation_results_data[tag] = {}
                 automation_results_data[tag]["test_name"] = automation_asset_info["content"][0]["name"]
-                if tag not in ["airtel_monitor", "airtel_reporter"]:
+                # TODO - parameters for monitor/reporter tags
+                if tag not in [tag_monitor_script, tag_reporter_script]:
                     testcases_list.append(full_path)
                     # TODO - Append monitor previous result script
                     testcases_list.append(monitor_test_path)
@@ -472,6 +473,9 @@ def main():
     topology_id = "77b5d525-f9ce-4c70-81de-8141200ed5f0"
     jira_session = "N/A"
     zephyr_session = "N/A"
+    '''
+    Hardcoded stuff END
+    '''
     runlist_parameters = [
         {"name": "jira_project_key", "type": "TEXT", "value": jira_project_key},
         {"name": "jira_project_release_name", "type": "TEXT", "value": jira_project_release_name},
@@ -481,9 +485,7 @@ def main():
         {"name": "runlist_name", "type": "TEXT", "value": runlist_name},
         {"name": "topology_name", "type": "TEXT", "value": topology_name}
     ]
-    '''
-    Hardcoded stuff END
-    '''
+
     if test_keys["ok"]:
         deploy_runlist_response = deploy_runlist_execution(cycle_id=test_keys["test_cycle_id"],
                                                            keys_list=test_keys["test_keys_list"],
