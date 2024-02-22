@@ -205,6 +205,7 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
     # save full path for monitor script in a variable named monitor_test_path
     tag_monitor_script = "airtel_monitor"
     filter_set = {"tags": [tag_monitor_script]}
+    print('filter set: ', filter_set)
     automation_assets = velocity_session.get_automation_assets(filters=filter_set)
     print('automation_assets: ', automation_assets)
     if len(automation_assets["content"]) != 0:
