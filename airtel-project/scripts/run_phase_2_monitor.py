@@ -12,10 +12,10 @@ from parameters.global_parameters import Jira as JIRAPARAMS
 from parameters.global_parameters import Velocity as VELOCITYPARAMS
 
 
-from datetime import datetime
-from libs.libs_html_reporting.HTMLReportCore import HTMLGenerator
+# from datetime import datetime
+# from libs.libs_html_reporting.HTMLReportCore import HTMLGenerator
 # from libs.libs_jira.JiraCore import JiraCore
-from libs.libs_zephyr.ZephyrCore import ZephyrCore
+# from libs.libs_zephyr.ZephyrCore import ZephyrCore
 
 log_worker = Local_logger.create_logger(__name__, REPORTINGPARAMS["log_level_default"],
                                         REPORTINGPARAMS["test_log_path"], "s_run_zephyr_automation_cycle.txt")
