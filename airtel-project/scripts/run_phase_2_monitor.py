@@ -122,7 +122,7 @@ def main():
 
     runlist_summary = velocity_session.get_runlist_execution(runlist_guid)[0]["executions"]
     test_case_summary = [i for i in runlist_summary if i["runlistItemId"] == str(int(monitor_runlist_item_number) - 1)]
-    test_case_report_id = test_case_summary[0]["executionId"]
+    test_case_report_id = test_case_summary[0]["executionID"]
     test_case_result = test_case_summary[0]["result"]
     print('Report Id for previous test: ', test_case_report_id)
     print('Result for previons test: ', test_case_result)
