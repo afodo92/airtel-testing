@@ -114,10 +114,6 @@ def main():
     monitor_execution_report = velocity_session.get_execution_id(monitor_report_id)
     monitor_runlist_item_number = monitor_execution_report["runlistItemId"]
     runlist_guid = monitor_execution_report["runlistGuid"]
-    print('DEBUG: monitor_report_id', monitor_report_id)
-    print('DEBUG: monitor_execution_report', monitor_execution_report)
-    print('DEBUG: monitor_runlist_item_number', monitor_runlist_item_number)
-    print('DEBUG: runlist_guid', runlist_guid)
 
     # TODO: Extract Test Cycle ID
     # We will extract it from the RunList arguments (it will be added as an RunList argument when the RunList is created)
@@ -125,13 +121,23 @@ def main():
     # TODO: Identify the previously executed script
 
     runlist_summary = velocity_session.get_runlist_execution(runlist_guid)[0]["executions"]
-    print('DEBUG: runlist_summary', runlist_summary)
     test_case_summary = [i for i in runlist_summary if i["runlistItemId"] == str(int(monitor_runlist_item_number) - 1)]
-    print('DEBUG: test_case_summary', test_case_summary)
     test_case_report_id = test_case_summary[0]["executionID"]
-    print('DEBUG: test_case_report_id', test_case_report_id)
     test_case_result = test_case_summary[0]["result"]
-    print('DEBUG: test_case_result', test_case_result)
+    print('INITIAL test_case_result: ', test_case_result)
+    # TODO: Add retries for get_execution_id until it's COMPLETED
+    retries = 1
+    while test_case_result == "INDETERMINATE" and retries < 11:
+        print('INDETERMINATE!!!! -> retrying')
+        log_worker.warning(f"Testcase {test_case_report_id} has executionState COMPLETED but "
+                           f"results INDETERMINATE. Retry: {retries}.")
+        time.sleep(1)
+        testcase_execution_status = velocity_session.get_execution_id(execution_id=test_case_report_id)
+        if type(testcase_execution_status) is not dict:
+            testcase_execution_status = json.loads(testcase_execution_status)
+        test_case_result = testcase_execution_status["result"]
+        retries += 1
+    print('FINAL test_case_result: ', test_case_result)
 
     # TODO: Identify the result for the previously exected script
     # TODO: If test result is failed, open Jira defect ID
