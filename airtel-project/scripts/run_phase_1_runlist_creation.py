@@ -351,161 +351,154 @@ def deploy_runlist_execution(cycle_id, keys_list, runlist_name, jira_project_ver
         return {"ok": False}
 
 
-def main():
-    """Main procedure"""
+'''Initializing arguments'''
+jira_project_key = ""
+jira_project_release_name = ""
+zephyr_test_cycle_name = ""
+story_key_for_comment = ""
+zephyr_build = ""
+runlist_name = ""
+topology_name = ""
 
-    '''Initializing arguments'''
-    jira_project_key = ""
-    jira_project_release_name = ""
-    zephyr_test_cycle_name = ""
-    story_key_for_comment = ""
-    zephyr_build = ""
-    runlist_name = ""
-    topology_name = ""
+parser = argparse.ArgumentParser()
+parser.add_argument('-jira_project_key', required=True, dest="JIRA_PROJECT_KEY")
+parser.add_argument('-jira_project_release_name', required=True, dest="JIRA_PROJECT_RELEASE_NAME")
+parser.add_argument('-zephyr_test_cycle_name', required=True, dest="ZEPHYR_TEST_CYCLE_NAME")
+parser.add_argument('-story_key_for_comment', required=True, dest="STORY_KEY_FOR_COMMENT")
+parser.add_argument('-zephyr_build', required=True, dest="ZEPHYR_BUILD")
+parser.add_argument('-runlist_name', required=True, dest="RUNLIST_NAME")
+parser.add_argument('-topology_name', required=True, dest="TOPOLOGY_NAME")
+parser.add_argument('-zephyr_test_cycle_id', required=True, dest="ZEPHYR_TEST_CYCLE_ID")
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-jira_project_key', required=True, dest="JIRA_PROJECT_KEY")
-    parser.add_argument('-jira_project_release_name', required=True, dest="JIRA_PROJECT_RELEASE_NAME")
-    parser.add_argument('-zephyr_test_cycle_name', required=True, dest="ZEPHYR_TEST_CYCLE_NAME")
-    parser.add_argument('-story_key_for_comment', required=True, dest="STORY_KEY_FOR_COMMENT")
-    parser.add_argument('-zephyr_build', required=True, dest="ZEPHYR_BUILD")
-    parser.add_argument('-runlist_name', required=True, dest="RUNLIST_NAME")
-    parser.add_argument('-topology_name', required=True, dest="TOPOLOGY_NAME")
-    parser.add_argument('-zephyr_test_cycle_id', required=True, dest="ZEPHYR_TEST_CYCLE_ID")
+jira_project_key = parser.parse_known_args()[0].JIRA_PROJECT_KEY
+jira_project_release_name = parser.parse_known_args()[0].JIRA_PROJECT_RELEASE_NAME
+zephyr_test_cycle_name = parser.parse_known_args()[0].ZEPHYR_TEST_CYCLE_NAME
+story_key_for_comment = parser.parse_known_args()[0].STORY_KEY_FOR_COMMENT
+zephyr_build = parser.parse_known_args()[0].ZEPHYR_BUILD
+runlist_name = parser.parse_known_args()[0].RUNLIST_NAME
+topology_name = parser.parse_known_args()[0].TOPOLOGY_NAME
+zephyr_test_cycle_id = parser.parse_known_args()[0].ZEPHYR_TEST_CYCLE_ID
 
-    jira_project_key = parser.parse_known_args()[0].JIRA_PROJECT_KEY
-    jira_project_release_name = parser.parse_known_args()[0].JIRA_PROJECT_RELEASE_NAME
-    zephyr_test_cycle_name = parser.parse_known_args()[0].ZEPHYR_TEST_CYCLE_NAME
-    story_key_for_comment = parser.parse_known_args()[0].STORY_KEY_FOR_COMMENT
-    zephyr_build = parser.parse_known_args()[0].ZEPHYR_BUILD
-    runlist_name = parser.parse_known_args()[0].RUNLIST_NAME
-    topology_name = parser.parse_known_args()[0].TOPOLOGY_NAME
-    zephyr_test_cycle_id = parser.parse_known_args()[0].ZEPHYR_TEST_CYCLE_ID
+if jira_project_key == "":
+    log_worker.error(f"Argument jira_project_key is empty, exiting execution.")
+    log_worker.error(f"Finished: FAILED")
+    sys.exit(0)
+if jira_project_release_name == "":
+    log_worker.error(f"Argument jira_project_release_name is empty, exiting execution.")
+    log_worker.error(f"Finished: FAILED")
+    sys.exit(0)
+if zephyr_test_cycle_name == "":
+    log_worker.error(f"Argument zephyr_test_cycle_name is empty, exiting execution. Set as N/A if runlist_name is "
+                     f"provided.")
+    log_worker.error(f"Finished: FAILED")
+    sys.exit(0)
+if story_key_for_comment == "":
+    log_worker.error(f"Argument story_key_for_comment is empty, exiting execution.")
+    log_worker.error(f"Finished: FAILED")
+    sys.exit(0)
+if zephyr_build == "":
+    log_worker.error(f"Argument zephyr_build is empty, exiting execution.")
+    log_worker.error(f"Finished: FAILED")
+    sys.exit(0)
+if runlist_name == "":
+    log_worker.error(f"Argument runlist_name is empty, exiting execution.")
+    log_worker.error(f"Finished: FAILED")
+    sys.exit(0)
+if topology_name == "":
+    log_worker.error(f"Argument topology_name is empty, exiting execution.")
+    log_worker.error(f"Finished: FAILED")
+    sys.exit(0)
+if zephyr_test_cycle_id == "":
+    log_worker.error(f"Argument zephyr_test_cycle_id is empty, exiting execution.")
+    log_worker.error(f"Finished: FAILED")
+    sys.exit(0)
 
-    if jira_project_key == "":
-        log_worker.error(f"Argument jira_project_key is empty, exiting execution.")
+'''Open Sessions'''
+''' - Velocity'''
+velocity = VELOCITYPARAMS['host']
+velo_user = VELOCITYPARAMS['user']
+velo_password = VELOCITYPARAMS['pass']
+
+velocity_session = Velocity.API(velocity, velo_user, velo_password)
+
+# ''' - Jira'''
+# jira_service_name = JIRAPARAMS['service_name_velo']
+# properties_list = ['ipAddress', 'username', 'password']
+# properties_jira = velocity_session.get_resource_property_value(jira_service_name, properties_list)
+# if not properties_jira:
+#     log_worker.error(f"Failed to extract JIRA service information from Velocity")
+#     sys.exit(0)
+# try:
+#     log_worker.info(
+#         f'Opening Jira session on {properties_jira["ipAddress"]} with user {properties_jira["username"]}')
+#     jira_session = JiraCore(properties_jira["ipAddress"], properties_jira["username"], properties_jira["password"])
+# except Exception as e:
+#     log_worker.error(f"Failed to open JIRA sessions\n {e}")
+#     sys.exit(0)
+#
+# ''' - Zephyr'''
+# log_worker.info(f'Opening Zephyr session on {properties_jira["ipAddress"]} with user {properties_jira["username"]}')
+# zephyr_session = ZephyrCore(properties_jira["ipAddress"], properties_jira["username"], properties_jira["password"])
+# if not zephyr_session.login():
+#     log_worker.error("Failed to open Zephyr sessions")
+#     sys.exit(0)
+#
+# '''Retrieve the topology ID'''
+# if topology_name != "N/A":
+#     topology_id = velocity_session.get_topology_id_by_name(topology_name)
+# else:
+#     topology_id = ""
+#
+# '''Retrieve the keys for the specified cycle name'''
+# if runlist_name == "N/A":
+#     test_keys = zephyr_get_test_keys_from_cycle(jira_project_key=jira_project_key,
+#                                                 jira_project_version_name=jira_project_release_name,
+#                                                 zephyr_test_cycle_name=zephyr_test_cycle_name,
+#                                                 jira_session=jira_session, zephyr_session=zephyr_session)
+#
+# else:
+#     test_keys = {"ok": runlist_name, "test_cycle_id": None, "test_keys_list": None}
+
+'''
+Hardcoded stuff
+'''
+test_keys = {"ok": runlist_name, "test_cycle_id": "Test_Cycle_Id", "test_keys_list": ["airtel_pass","airtel_fail","airtel_pass","airtel_fail"]}
+# Case 2: runlist_name = "New_Runlist"
+topology_id = "77b5d525-f9ce-4c70-81de-8141200ed5f0"
+jira_session = "N/A"
+zephyr_session = "N/A"
+'''
+Hardcoded stuff END
+'''
+runlist_parameters = [
+    {"name": "jira_project_key", "type": "TEXT", "value": jira_project_key},
+    {"name": "jira_project_release_name", "type": "TEXT", "value": jira_project_release_name},
+    {"name": "zephyr_test_cycle_name", "type": "TEXT", "value": zephyr_test_cycle_name},
+    {"name": "story_key_for_comment", "type": "TEXT", "value": story_key_for_comment},
+    {"name": "zephyr_build", "type": "TEXT", "value": zephyr_build},
+    {"name": "runlist_name", "type": "TEXT", "value": runlist_name},
+    {"name": "topology_name", "type": "TEXT", "value": topology_name}
+]
+
+if test_keys["ok"]:
+    deploy_runlist_response = deploy_runlist_execution(cycle_id=test_keys["test_cycle_id"],
+                                                       keys_list=test_keys["test_keys_list"],
+                                                       jira_project_key=jira_project_key,
+                                                       jira_project_version_name=jira_project_release_name,
+                                                       zephyr_test_cycle_name=zephyr_test_cycle_name,
+                                                       zephyr_build=zephyr_build,
+                                                       runlist_name=runlist_name,
+                                                       velocity_session=velocity_session,
+                                                       topology_id=topology_id,
+                                                       jira_session=jira_session,
+                                                       zephyr_session=zephyr_session,
+                                                       runlist_parameters=runlist_parameters)
+    if not deploy_runlist_response["ok"]:
+        log_worker.error(f"Runlist could not be started. Exiting execution.")
         log_worker.error(f"Finished: FAILED")
         sys.exit(0)
-    if jira_project_release_name == "":
-        log_worker.error(f"Argument jira_project_release_name is empty, exiting execution.")
-        log_worker.error(f"Finished: FAILED")
-        sys.exit(0)
-    if zephyr_test_cycle_name == "":
-        log_worker.error(f"Argument zephyr_test_cycle_name is empty, exiting execution. Set as N/A if runlist_name is "
-                         f"provided.")
-        log_worker.error(f"Finished: FAILED")
-        sys.exit(0)
-    if story_key_for_comment == "":
-        log_worker.error(f"Argument story_key_for_comment is empty, exiting execution.")
-        log_worker.error(f"Finished: FAILED")
-        sys.exit(0)
-    if zephyr_build == "":
-        log_worker.error(f"Argument zephyr_build is empty, exiting execution.")
-        log_worker.error(f"Finished: FAILED")
-        sys.exit(0)
-    if runlist_name == "":
-        log_worker.error(f"Argument runlist_name is empty, exiting execution.")
-        log_worker.error(f"Finished: FAILED")
-        sys.exit(0)
-    if topology_name == "":
-        log_worker.error(f"Argument topology_name is empty, exiting execution.")
-        log_worker.error(f"Finished: FAILED")
-        sys.exit(0)
-    if zephyr_test_cycle_id == "":
-        log_worker.error(f"Argument zephyr_test_cycle_id is empty, exiting execution.")
-        log_worker.error(f"Finished: FAILED")
-        sys.exit(0)
-
-    '''Open Sessions'''
-    ''' - Velocity'''
-    velocity = VELOCITYPARAMS['host']
-    velo_user = VELOCITYPARAMS['user']
-    velo_password = VELOCITYPARAMS['pass']
-
-    velocity_session = Velocity.API(velocity, velo_user, velo_password)
-
-    # ''' - Jira'''
-    # jira_service_name = JIRAPARAMS['service_name_velo']
-    # properties_list = ['ipAddress', 'username', 'password']
-    # properties_jira = velocity_session.get_resource_property_value(jira_service_name, properties_list)
-    # if not properties_jira:
-    #     log_worker.error(f"Failed to extract JIRA service information from Velocity")
-    #     sys.exit(0)
-    # try:
-    #     log_worker.info(
-    #         f'Opening Jira session on {properties_jira["ipAddress"]} with user {properties_jira["username"]}')
-    #     jira_session = JiraCore(properties_jira["ipAddress"], properties_jira["username"], properties_jira["password"])
-    # except Exception as e:
-    #     log_worker.error(f"Failed to open JIRA sessions\n {e}")
-    #     sys.exit(0)
-    #
-    # ''' - Zephyr'''
-    # log_worker.info(f'Opening Zephyr session on {properties_jira["ipAddress"]} with user {properties_jira["username"]}')
-    # zephyr_session = ZephyrCore(properties_jira["ipAddress"], properties_jira["username"], properties_jira["password"])
-    # if not zephyr_session.login():
-    #     log_worker.error("Failed to open Zephyr sessions")
-    #     sys.exit(0)
-    #
-    # '''Retrieve the topology ID'''
-    # if topology_name != "N/A":
-    #     topology_id = velocity_session.get_topology_id_by_name(topology_name)
-    # else:
-    #     topology_id = ""
-    #
-    # '''Retrieve the keys for the specified cycle name'''
-    # if runlist_name == "N/A":
-    #     test_keys = zephyr_get_test_keys_from_cycle(jira_project_key=jira_project_key,
-    #                                                 jira_project_version_name=jira_project_release_name,
-    #                                                 zephyr_test_cycle_name=zephyr_test_cycle_name,
-    #                                                 jira_session=jira_session, zephyr_session=zephyr_session)
-    #
-    # else:
-    #     test_keys = {"ok": runlist_name, "test_cycle_id": None, "test_keys_list": None}
-
-    '''
-    Hardcoded stuff
-    '''
-    test_keys = {"ok": runlist_name, "test_cycle_id": "Test_Cycle_Id", "test_keys_list": ["airtel_pass","airtel_fail","airtel_pass","airtel_fail"]}
-    # Case 2: runlist_name = "New_Runlist"
-    topology_id = "77b5d525-f9ce-4c70-81de-8141200ed5f0"
-    jira_session = "N/A"
-    zephyr_session = "N/A"
-    '''
-    Hardcoded stuff END
-    '''
-    runlist_parameters = [
-        {"name": "jira_project_key", "type": "TEXT", "value": jira_project_key},
-        {"name": "jira_project_release_name", "type": "TEXT", "value": jira_project_release_name},
-        {"name": "zephyr_test_cycle_name", "type": "TEXT", "value": zephyr_test_cycle_name},
-        {"name": "story_key_for_comment", "type": "TEXT", "value": story_key_for_comment},
-        {"name": "zephyr_build", "type": "TEXT", "value": zephyr_build},
-        {"name": "runlist_name", "type": "TEXT", "value": runlist_name},
-        {"name": "topology_name", "type": "TEXT", "value": topology_name}
-    ]
-
-    if test_keys["ok"]:
-        deploy_runlist_response = deploy_runlist_execution(cycle_id=test_keys["test_cycle_id"],
-                                                           keys_list=test_keys["test_keys_list"],
-                                                           jira_project_key=jira_project_key,
-                                                           jira_project_version_name=jira_project_release_name,
-                                                           zephyr_test_cycle_name=zephyr_test_cycle_name,
-                                                           zephyr_build=zephyr_build,
-                                                           runlist_name=runlist_name,
-                                                           velocity_session=velocity_session,
-                                                           topology_id=topology_id,
-                                                           jira_session=jira_session,
-                                                           zephyr_session=zephyr_session,
-                                                           runlist_parameters=runlist_parameters)
-        if not deploy_runlist_response["ok"]:
-            log_worker.error(f"Runlist could not be started. Exiting execution.")
-            log_worker.error(f"Finished: FAILED")
-            sys.exit(0)
-    else:
-        log_worker.error(f"Test keys could not be obtained. Response: {test_keys}."
-                         f" Exiting execution.")
-        log_worker.error(f"Finished: FAILED")
-        sys.exit(0)
-
-
-if __name__ == "__main__":
-    main()
+else:
+    log_worker.error(f"Test keys could not be obtained. Response: {test_keys}."
+                     f" Exiting execution.")
+    log_worker.error(f"Finished: FAILED")
+    sys.exit(0)
