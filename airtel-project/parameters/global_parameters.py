@@ -15,7 +15,7 @@ OpenSearch = {
 }
 
 Velocity = {
-    "host": "vel-airtel-test.spirenteng.com",
+    "host": "vel-airtel-test.velocity-pv.lwd.int.spirent.io",
     "user": "spirent",
     "pass": "spirent"
 }
