@@ -134,6 +134,12 @@
 					"type": "TEXT",
 					"value": "N/A",
 					"description": "Name of the topology. Set as 'N/A' if no topology will be used."
+				},
+				{
+					"name": "zephyr_test_cycle_id",
+					"type": "TEXT",
+					"value": "N/A",
+					"description": "Id of the Zephyr test cycle."
 				}
 			]
 		},
