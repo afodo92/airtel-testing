@@ -11,6 +11,7 @@
 # ---------------------------------------------------------------------------
 import os
 import sys
+import argparse
 import time
 from datetime import datetime
 
@@ -362,35 +363,24 @@ def main():
     runlist_name = ""
     topology_name = ""
 
-    for i in range(1, len(sys.argv[1:]), 2):
-        log_worker.info(f"Argument: {sys.argv[i]}")
-        log_worker.info(f"Value: {sys.argv[i + 1]}")
-        if sys.argv[i] == "--jira_project_key":
-            log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-            jira_project_key = sys.argv[i + 1]
-        elif sys.argv[i] == "--jira_project_release_name":
-            log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-            jira_project_release_name = sys.argv[i + 1]
-        elif sys.argv[i] == "--zephyr_test_cycle_name":
-            log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-            zephyr_test_cycle_name = sys.argv[i + 1]
-        elif sys.argv[i] == "--keys_list":
-            log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-            zephyr_build = sys.argv[i + 1]
-        elif sys.argv[i] == "--story_key_for_comment":
-            log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-            story_key_for_comment = sys.argv[i + 1]
-        elif sys.argv[i] == "--zephyr_build":
-            log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-            zephyr_build = sys.argv[i + 1]
-        elif sys.argv[i] == "--runlist_name":
-            log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-            runlist_name = sys.argv[i + 1]
-        elif sys.argv[i] == "--topology_name":
-            log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-            topology_name = sys.argv[i + 1]
-        else:
-            log_worker.warning(f"Argument {sys.argv[i]} is not recognized and will not be used.")
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-jira_project_key', required=True, dest="JIRA_PROJECT_KEY")
+    parser.add_argument('-jira_project_release_name', required=True, dest="JIRA_PROJECT_RELEASE_NAME")
+    parser.add_argument('-zephyr_test_cycle_name', required=True, dest="ZEPHYR_TEST_CYCLE_NAME")
+    parser.add_argument('-story_key_for_comment', required=True, dest="STORY_KEY_FOR_COMMENT")
+    parser.add_argument('-zephyr_build', required=True, dest="ZEPHYR_BUILD")
+    parser.add_argument('-runlist_name', required=True, dest="RUNLIST_NAME")
+    parser.add_argument('-topology_name', required=True, dest="TOPOLOGY_NAME")
+    parser.add_argument('-zephyr_test_cycle_id', required=True, dest="ZEPHYR_TEST_CYCLE_ID")
+
+    jira_project_key = parser.parse_known_args()[0].JIRA_PROJECT_KEY
+    jira_project_release_name = parser.parse_known_args()[0].JIRA_PROJECT_RELEASE_NAME
+    zephyr_test_cycle_name = parser.parse_known_args()[0].ZEPHYR_TEST_CYCLE_NAME
+    story_key_for_comment = parser.parse_known_args()[0].STORY_KEY_FOR_COMMENT
+    zephyr_build = parser.parse_known_args()[0].ZEPHYR_BUILD
+    runlist_name = parser.parse_known_args()[0].RUNLIST_NAME
+    topology_name = parser.parse_known_args()[0].TOPOLOGY_NAME
+    zephyr_test_cycle_id = parser.parse_known_args()[0].ZEPHYR_TEST_CYCLE_ID
 
     if jira_project_key == "":
         log_worker.error(f"Argument jira_project_key is empty, exiting execution.")
@@ -419,6 +409,10 @@ def main():
         sys.exit(0)
     if topology_name == "":
         log_worker.error(f"Argument topology_name is empty, exiting execution.")
+        log_worker.error(f"Finished: FAILED")
+        sys.exit(0)
+    if zephyr_test_cycle_id == "":
+        log_worker.error(f"Argument zephyr_test_cycle_id is empty, exiting execution.")
         log_worker.error(f"Finished: FAILED")
         sys.exit(0)
 
