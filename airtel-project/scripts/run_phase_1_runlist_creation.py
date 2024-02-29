@@ -362,6 +362,7 @@ def main():
     zephyr_build = ""
     runlist_name = ""
     topology_name = ""
+    zephyr_test_cycle_id = ""
 
     for i in range(1, len(sys.argv[1:]), 2):
         log_worker.info(f"Argument: {sys.argv[i]}")
