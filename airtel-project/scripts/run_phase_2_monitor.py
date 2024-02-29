@@ -67,6 +67,7 @@ def main():
         else:
             log_worker.warning(f"Argument {sys.argv[i]} is not recognized and will not be used.")
 
+    print('sys.argv: ', sys.argv)
     print('jira_project_key: ', jira_project_key)
     print('jira_project_release_name: ', jira_project_release_name)
     print('zephyr_test_cycle_name: ', zephyr_test_cycle_name)
