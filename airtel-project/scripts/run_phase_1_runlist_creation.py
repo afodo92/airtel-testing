@@ -362,7 +362,6 @@ def main():
     zephyr_build = ""
     runlist_name = ""
     topology_name = ""
-    zephyr_test_cycle_id = ""
 
     for i in range(1, len(sys.argv[1:]), 2):
         log_worker.info(f"Argument: {sys.argv[i]}")
@@ -391,13 +390,8 @@ def main():
         elif sys.argv[i] == "--topology_name":
             log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
             topology_name = sys.argv[i + 1]
-        elif sys.argv[i] == "--zephyr_test_cycle_id":
-            log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-            zephyr_test_cycle_id = sys.argv[i + 1]
         else:
             log_worker.warning(f"Argument {sys.argv[i]} is not recognized and will not be used.")
-
-    print('sys.argv: ', sys.argv)
 
     if jira_project_key == "":
         log_worker.error(f"Argument jira_project_key is empty, exiting execution.")
@@ -426,10 +420,6 @@ def main():
         sys.exit(0)
     if topology_name == "":
         log_worker.error(f"Argument topology_name is empty, exiting execution.")
-        log_worker.error(f"Finished: FAILED")
-        sys.exit(0)
-    if zephyr_test_cycle_id == "":
-        log_worker.error(f"Argument zephyr_test_cycle_id is empty, exiting execution.")
         log_worker.error(f"Finished: FAILED")
         sys.exit(0)
 
