@@ -397,6 +397,16 @@ def main():
         else:
             log_worker.warning(f"Argument {sys.argv[i]} is not recognized and will not be used.")
 
+    '''DEBUG arguments'''
+    print(jira_project_key)
+    print(jira_project_release_name)
+    print(zephyr_test_cycle_name)
+    print(story_key_for_comment)
+    print(zephyr_build)
+    print(runlist_name)
+    print(topology_name)
+    print(zephyr_test_cycle_id)
+
     if jira_project_key == "":
         log_worker.error(f"Argument jira_project_key is empty, exiting execution.")
         log_worker.error(f"Finished: FAILED")
