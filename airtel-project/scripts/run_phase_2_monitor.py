@@ -32,13 +32,7 @@ def main():
     zephyr_build = ""
     runlist_name = ""
     topology_name = ""
-
-    # TODO: Update the list of needed parameters and also include zephyr_cycle_key
-    # import argparse
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument('-zephyr_test_cycle_id', required=True, dest="ZEPHYR_TEST_CYCLE_ID")
-    # zephyr_test_cycle_id = parser.parse_known_args()[0].ZEPHYR_TEST_CYCLE_ID
-
+    zephyr_test_cycle_id = ""
 
     for i in range(1, len(sys.argv[1:]), 2):
         log_worker.info(f"Argument: {sys.argv[i]}")
@@ -67,6 +61,9 @@ def main():
         elif sys.argv[i] == "--topology_name":
             log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
             topology_name = sys.argv[i + 1]
+        elif sys.argv[i] == "--zephyr_test_cycle_id":
+            log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
+            zephyr_test_cycle_id = sys.argv[i + 1]
         else:
             log_worker.warning(f"Argument {sys.argv[i]} is not recognized and will not be used.")
 
@@ -99,6 +96,10 @@ def main():
         log_worker.error(f"Argument topology_name is empty, exiting execution.")
         log_worker.error(f"Finished: FAILED")
         sys.exit(0)
+    if zephyr_test_cycle_id == "":
+        log_worker.error(f"Argument zephyr_test_cycle_id is empty, exiting execution.")
+        log_worker.error(f"Finished: FAILED")
+        sys.exit(0)
 
     velocity = VELOCITYPARAMS['host']
     velo_user = VELOCITYPARAMS['user']
@@ -106,26 +107,17 @@ def main():
     '''Open Velocity Session'''
     velocity_session = Velocity.API(velocity, velo_user, velo_password)
 
-    # TODO: Investigate and decide how to pass the input parameters from above
-    # Change to argparse
-
-    # TODO: Extract runlist ID for the runlist running this monitor script
+    '''Extract Runlist Guid from the current script execution report'''
     monitor_report_id = os.environ['VELOCITY_PARAM_REPORT_ID']
     monitor_execution_report = velocity_session.get_execution_id(monitor_report_id)
     monitor_runlist_item_number = monitor_execution_report["runlistItemId"]
     runlist_guid = monitor_execution_report["runlistGuid"]
 
-    # TODO: Extract Test Cycle ID
-    # We will extract it from the RunList arguments (it will be added as an RunList argument when the RunList is created)
-
-    # TODO: Identify the previously executed script
-
+    '''Identify the previously executed script from the Runlist and extract id and result'''
     runlist_summary = velocity_session.get_runlist_execution(runlist_guid)[0]["executions"]
     test_case_summary = [i for i in runlist_summary if i["runlistItemId"] == str(int(monitor_runlist_item_number) - 1)]
     test_case_report_id = test_case_summary[0]["executionID"]
     test_case_result = test_case_summary[0]["result"]
-    print('INITIAL test_case_result: ', test_case_result)
-    # TODO: Add retries for get_execution_id until it's COMPLETED
     retries = 1
     while test_case_result == "INDETERMINATE" and retries < 11:
         print('INDETERMINATE!!!! -> retrying')
@@ -137,9 +129,8 @@ def main():
             testcase_execution_status = json.loads(testcase_execution_status)
         test_case_result = testcase_execution_status["result"]
         retries += 1
-    print('FINAL test_case_result: ', test_case_result)
 
-    # TODO: Identify the result for the previously exected script
+    # TODO: Identify the result for the previously exected script: text_case_report_id and test_case_result
     # TODO: If test result is failed, open Jira defect ID
     # failure_reason = execution_id_response["failureReason"]
     # if failure_reason is None:
