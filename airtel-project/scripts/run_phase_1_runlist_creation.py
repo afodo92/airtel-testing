@@ -404,8 +404,8 @@ def main():
     print(story_key_for_comment)
     print(zephyr_build)
     print(runlist_name)
-    print(topology_name)
-    print(zephyr_test_cycle_id)
+    print('topology_name: ', topology_name)
+    print('zephyr_test_cycle_id: ', zephyr_test_cycle_id)
 
     if jira_project_key == "":
         log_worker.error(f"Argument jira_project_key is empty, exiting execution.")
