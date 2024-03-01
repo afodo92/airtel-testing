@@ -26,48 +26,6 @@ def main():
     """Main procedure"""
 
     '''Initializing arguments'''
-    # jira_project_key = ""
-    # jira_project_release_name = ""
-    # zephyr_test_cycle_name = ""
-    # story_key_for_comment = ""
-    # zephyr_build = ""
-    # runlist_name = ""
-    # topology_name = ""
-    # zephyr_test_cycle_id = ""
-    #
-    # for i in range(1, len(sys.argv[1:]), 2):
-    #     log_worker.info(f"Argument: {sys.argv[i]}")
-    #     log_worker.info(f"Value: {sys.argv[i + 1]}")
-    #     if sys.argv[i] == "--jira_project_key":
-    #         log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-    #         jira_project_key = sys.argv[i + 1]
-    #     elif sys.argv[i] == "--jira_project_release_name":
-    #         log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-    #         jira_project_release_name = sys.argv[i + 1]
-    #     elif sys.argv[i] == "--zephyr_test_cycle_name":
-    #         log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-    #         zephyr_test_cycle_name = sys.argv[i + 1]
-    #     elif sys.argv[i] == "--keys_list":
-    #         log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-    #         zephyr_build = sys.argv[i + 1]
-    #     elif sys.argv[i] == "--story_key_for_comment":
-    #         log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-    #         story_key_for_comment = sys.argv[i + 1]
-    #     elif sys.argv[i] == "--zephyr_build":
-    #         log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-    #         zephyr_build = sys.argv[i + 1]
-    #     elif sys.argv[i] == "--runlist_name":
-    #         log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-    #         runlist_name = sys.argv[i + 1]
-    #     elif sys.argv[i] == "--topology_name":
-    #         log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-    #         topology_name = sys.argv[i + 1]
-    #     elif sys.argv[i] == "--zephyr_test_cycle_id":
-    #         log_worker.info(f"Value for {sys.argv[i]} is {sys.argv[i + 1]}.")
-    #         zephyr_test_cycle_id = sys.argv[i + 1]
-    #     else:
-    #         log_worker.warning(f"Argument {sys.argv[i]} is not recognized and will not be used.")
-
     parser = argparse.ArgumentParser()
     parser.add_argument('--jira_project_key', required=True, dest="JIRA_PROJECT_KEY")
     parser.add_argument('--jira_project_release_name', required=True, dest="JIRA_PROJECT_RELEASE_NAME")
@@ -140,7 +98,6 @@ def main():
     test_case_result = test_case_summary[0]["result"]
     retries = 1
     while test_case_result == "INDETERMINATE" and retries < 11:
-        print('INDETERMINATE!!!! -> retrying')
         log_worker.warning(f"Testcase {test_case_report_id} has executionState COMPLETED but "
                            f"results INDETERMINATE. Retry: {retries}.")
         time.sleep(1)
